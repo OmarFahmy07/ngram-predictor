@@ -7,9 +7,16 @@ from nltk.tokenize import sent_tokenize, word_tokenize
 
 
 class Normalizer:
+    """
+    Loads, cleans, normalizes, tokenizes, and saves text data.
+
+    Used in:
+    - Module 1 (Data Prep): process full corpus
+    - Module 3 (Inference): normalize single input strings
+    """
 
     def load(self, folder_path: str) -> str:
-        
+        """Load and concatenate all .txt files from a folder."""
         texts = []
         for filename in os.listdir(folder_path):
             if filename.endswith(".txt"):
@@ -19,7 +26,7 @@ class Normalizer:
         return "\n".join(texts)
 
     def strip_gutenberg(self, text: str) -> str:
-        
+        """Remove Project Gutenberg header and footer."""
         start_marker = re.search(r"\*\*\* START OF THE PROJECT GUTENBERG EBOOK .* \*\*\*", text)
         end_marker = re.search(r"\*\*\* END OF THE PROJECT GUTENBERG EBOOK .* \*\*\*", text)
 
@@ -41,7 +48,7 @@ class Normalizer:
         return re.sub(r"\s+", " ", text).strip()
 
     def normalize(self, text: str) -> str:
-        
+        """Apply all normalization steps in order."""
         text = self.lowercase(text)
         text = self.remove_punctuation(text)
         text = self.remove_numbers(text)
@@ -55,7 +62,7 @@ class Normalizer:
         return word_tokenize(sentence)
 
     def save(self, sentences: List[List[str]], filepath: str) -> None:
-        
+        """Write tokenized sentences to file, one sentence per line."""
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
         with open(filepath, "w", encoding="utf-8") as f:
             for tokens in sentences:
@@ -64,7 +71,7 @@ class Normalizer:
 
 
 def main() -> None:
-    
+    """Local module test (not pipeline)."""
     print("Normalizer module loaded.")
 
 
