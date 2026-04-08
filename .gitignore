@@ -1,0 +1,10 @@
+# Data & generated artifacts
+data/
+*.json
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Env / secrets
+.env
