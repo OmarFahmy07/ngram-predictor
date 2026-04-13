@@ -5,11 +5,11 @@ import nltk
 from dotenv import load_dotenv
 
 from src.data_prep.normalizer import Normalizer
-
+from src.model.ngram_model import NGramModel
 
 def main():
     # Load configuration from .env
-    load_dotenv("config/.env")
+    load_dotenv("config/.env", override=True)
 
     # Set up command-line argument parsing
     parser = argparse.ArgumentParser(
@@ -51,12 +51,28 @@ def main():
         tokenized_sentences = []
         for sentence in sentences:
             sentence = normalizer.normalize(sentence)
-
             tokens = normalizer.word_tokenize(sentence)
             tokenized_sentences.append(tokens)
 
         # 6. Save output
         normalizer.save(tokenized_sentences, train_tokens_path)
+
+    # -----------------------------
+    # M2: Model
+    # -----------------------------
+    if args.step == "model":
+        token_file = os.getenv("TRAIN_TOKENS")
+        model_path = os.getenv("MODEL")
+        vocab_path = os.getenv("VOCAB")
+        unk_threshold = int(os.getenv("UNK_THRESHOLD"))
+        ngram_order = int(os.getenv("NGRAM_ORDER"))
+
+        model = NGramModel(ngram_order=ngram_order, unk_threshold=unk_threshold)
+        model.build_vocab(token_file)
+        model.build_counts_and_probabilities(token_file)
+        model.save_vocab(vocab_path)
+        model.save_model(model_path)
+
 
 
 if __name__ == "__main__":
