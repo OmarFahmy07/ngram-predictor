@@ -41,26 +41,21 @@ def main():
         # 2. Strip Project Gutenberg header/footer
         text = normalizer.strip_gutenberg(text)
 
-        # 3. Lowercase ONLY (keep punctuation for sentence boundaries)
-        text = normalizer.lowercase(text)
-
-        # 4. Sentence tokenize
+        # 3. Sentence tokenize
         sentences = normalizer.sentence_tokenize(text)
 
-        # 5. Keep only first 100 sentences (M1 sanity check requirement)
+        # 4. Keep only first 100 sentences (M1 sanity check requirement)
         sentences = sentences[:100]
 
-        # 6. Normalize each sentence and word tokenize
+        # 5. Normalize each sentence and word tokenize
         tokenized_sentences = []
         for sentence in sentences:
-            sentence = normalizer.remove_punctuation(sentence)
-            sentence = normalizer.remove_numbers(sentence)
-            sentence = normalizer.remove_whitespace(sentence)
+            sentence = normalizer.normalize(sentence)
 
             tokens = normalizer.word_tokenize(sentence)
             tokenized_sentences.append(tokens)
 
-        # 7. Save output
+        # 6. Save output
         normalizer.save(tokenized_sentences, train_tokens_path)
 
 
