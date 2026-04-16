@@ -39,7 +39,7 @@ At inference time, the system takes the last `NGRAM_ORDER - 1` words typed by th
    TRAIN_TOKENS=data/processed/train_tokens.txt
    MODEL=data/model/model.json
    VOCAB=data/model/vocab.json
-   UNK_THRESHOLD=3
+   UNK_THRESHOLD=1
    TOP_K=3
    NGRAM_ORDER=4
    ```
