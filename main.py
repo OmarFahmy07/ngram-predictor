@@ -28,7 +28,7 @@ def run_dataprep_100(normalizer: Normalizer) -> None:
     sentences = normalizer.sentence_tokenize(text)
 
     # 4. Keep only first 100 sentences (M1 sanity check requirement)
-    sentences = sentences[:100]
+    # sentences = sentences[:100]
 
     # 5. Normalize each sentence and word tokenize
     tokenized_sentences = []
@@ -113,6 +113,17 @@ def main():
     # -----------------------------
     if args.step == "inference":
         # Load model artifacts once, then run CLI
+        model.load(model_path, vocab_path)
+        predictor = Predictor(model, normalizer)
+        run_inference_loop(predictor, top_k)
+
+    
+    # -----------------------------
+    # M4: All (dataprep -> model -> inference)
+    # -----------------------------
+    if args.step == "all":
+        run_dataprep_100(normalizer)
+        run_model_build(model)
         model.load(model_path, vocab_path)
         predictor = Predictor(model, normalizer)
         run_inference_loop(predictor, top_k)
